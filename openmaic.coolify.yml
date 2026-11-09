@@ -1,0 +1,16 @@
+# Model configuration for this deployment. No secrets here: keys come from env vars.
+providers:
+  broslunas:
+    preset: openai-compatible
+    baseUrl: https://ai.broslunas.com/v1
+    apiKey: ${BROSLUNAS_API_KEY}
+    models: [top-models]
+
+slots:
+  llm: broslunas:top-models
+  agent:
+    model: broslunas:top-models
+    api: openai-completions
+
+# Users may still add their own providers/keys in the web settings.
+allowUserKeys: true
