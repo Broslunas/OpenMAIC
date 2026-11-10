@@ -13,26 +13,13 @@ services:
       - OWNER_SINGLE_USER=true
       - ACCESS_CODE=${SERVICE_PASSWORD_ACCESSCODE}
       - OPENMAIC_SECRET_KEY=${SERVICE_PASSWORD_64_SECRETKEY}
-      - OPENMAIC_CONFIG=/app/openmaic.yml
-      - BROSLUNAS_API_KEY=${BROSLUNAS_API_KEY:?set your ai.broslunas.com API key}
+      # Legacy env-based model config (no openmaic.yml): ai.broslunas.com is
+      # OpenAI-compatible, so it is wired in through the OpenAI provider.
+      - OPENAI_API_KEY=${BROSLUNAS_API_KEY:?set your ai.broslunas.com API key}
+      - OPENAI_BASE_URL=https://ai.broslunas.com/v1
+      - OPENAI_MODELS=top-models
+      - DEFAULT_MODEL=openai:top-models
     volumes:
-      - type: bind
-        source: ./openmaic-config.yml
-        target: /app/openmaic.yml
-        read_only: true
-        content: |
-          providers:
-            broslunas:
-              preset: openai-compatible
-              baseUrl: https://ai.broslunas.com/v1
-              apiKey: ${BROSLUNAS_API_KEY}
-              models: [top-models]
-          slots:
-            llm: broslunas:top-models
-            agent:
-              model: broslunas:top-models
-              api: openai-completions
-          allowUserKeys: true
       - openmaic-data:/app/data
     mem_limit: 1536m
     depends_on:
