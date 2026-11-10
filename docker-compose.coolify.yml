@@ -19,6 +19,8 @@ services:
       - OPENAI_BASE_URL=https://ai.broslunas.com/v1
       - OPENAI_MODELS=top-models
       - DEFAULT_MODEL=openai:top-models
+      # ai.broslunas.com returns responses OpenMAIC cannot parse in non-streaming mode.
+      - OPENAI_COMPAT_USE_STREAMING_CHAT=true
     volumes:
       - openmaic-data:/app/data
     mem_limit: 1536m
