@@ -21,6 +21,14 @@ services:
       - DEFAULT_MODEL=openai:top-models
       # ai.broslunas.com returns responses OpenMAIC cannot parse in non-streaming mode.
       - OPENAI_COMPAT_USE_STREAMING_CHAT=true
+      # Voice (TTS) and images through the same ai.broslunas.com gateway.
+      # edge-tts/* and google-tts/* are built-in 9router TTS providers (free).
+      - TTS_OPENAI_API_KEY=${BROSLUNAS_API_KEY}
+      - TTS_OPENAI_BASE_URL=https://ai.broslunas.com/v1
+      - TTS_OPENAI_MODELS=edge-tts/es-ES-ElviraNeural,google-tts/es
+      - IMAGE_OPENAI_API_KEY=${BROSLUNAS_API_KEY}
+      - IMAGE_OPENAI_BASE_URL=https://ai.broslunas.com/v1
+      - IMAGE_OPENAI_MODELS=top-models
     volumes:
       - openmaic-data:/app/data
     mem_limit: 1536m
