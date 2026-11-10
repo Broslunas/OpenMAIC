@@ -1,11 +1,13 @@
 # Coolify deployment of OpenMAIC (app + PostgreSQL, no video-export service).
+# The image is built by GitHub Actions (.github/workflows/build-image.yml) and
+# pulled from ghcr.io, so the Coolify server never compiles anything.
 # Upstream docker-compose.yml is left untouched so the fork can keep syncing.
 # In Coolify: set "Docker Compose Location" to /docker-compose.coolify.yml and
 # assign the domain to the `openmaic` service on port 3000.
 services:
   openmaic:
-    build:
-      context: .
+    image: ghcr.io/broslunas/openmaic:latest
+    pull_policy: always
     environment:
       - DATABASE_URL=postgres://openmaic:${SERVICE_PASSWORD_POSTGRES}@postgres:5432/openmaic
       - OWNER_SINGLE_USER=true
