@@ -16,7 +16,23 @@ services:
       - OPENMAIC_CONFIG=/app/openmaic.yml
       - BROSLUNAS_API_KEY=${BROSLUNAS_API_KEY:?set your ai.broslunas.com API key}
     volumes:
-      - ./openmaic.coolify.yml:/app/openmaic.yml:ro
+      - type: bind
+        source: ./openmaic-config.yml
+        target: /app/openmaic.yml
+        read_only: true
+        content: |
+          providers:
+            broslunas:
+              preset: openai-compatible
+              baseUrl: https://ai.broslunas.com/v1
+              apiKey: ${BROSLUNAS_API_KEY}
+              models: [top-models]
+          slots:
+            llm: broslunas:top-models
+            agent:
+              model: broslunas:top-models
+              api: openai-completions
+          allowUserKeys: true
       - openmaic-data:/app/data
     mem_limit: 1536m
     depends_on:
